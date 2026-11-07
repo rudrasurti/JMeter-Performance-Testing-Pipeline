@@ -41,7 +41,7 @@ jobs:
 
       - name: Cache JMeter
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: apache-jmeter-${{ env.JMETER_VERSION }}
           key: jmeter-${{ env.JMETER_VERSION }}
