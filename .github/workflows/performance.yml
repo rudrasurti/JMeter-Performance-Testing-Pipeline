@@ -41,7 +41,7 @@ jobs:
 
       - name: Cache JMeter
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: apache-jmeter-${{ env.JMETER_VERSION }}
           key: jmeter-${{ env.JMETER_VERSION }}
@@ -100,4 +100,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
