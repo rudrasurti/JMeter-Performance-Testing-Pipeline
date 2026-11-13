@@ -49,7 +49,16 @@ jobs:
       - name: Download JMeter
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          curl -fsSL https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz | tar xz
+          # dlcdn is fast but only keeps the latest release; archive.apache.org keeps all versions
+          for url in \
+            "https://dlcdn.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz" \
+            "https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"; do
+            if curl -fsSL --retry 4 --retry-delay 10 --retry-all-errors --max-time 300 -o jmeter.tgz "$url"; then
+              tar xzf jmeter.tgz && rm jmeter.tgz && exit 0
+            fi
+            echo "Download failed from $url, trying next mirror"
+          done
+          exit 1
 
       - name: Run load test (non-GUI)
         run: |
